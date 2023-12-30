@@ -1,6 +1,7 @@
 import express from "express";
-import swaggerUi from "swagger-ui-express";
+// import swaggerUi from "swagger-ui-express";
 import cors from "cors";
+import { kafka } from "./lib/kafka";
 
 // import swaggerDef from "./swagger-spec.json";
 
@@ -35,8 +36,18 @@ app.use(express.json({ limit: "10kb" }));
 // app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDef));
 
 // Methods to start server.
-const start = () => {
+const start = async () => {
   try {
+    const consumer = kafka.consumer({ groupId: "create-service-consumer" });
+    await consumer.connect();
+    await consumer.subscribe({ topic: "createServiceOrder" });
+    await consumer.run({
+      eachMessage: async ({ topic, partition, message }) => {
+        console.log({
+          value: message.value.toString(),
+        });
+      },
+    });
     // Method to make express service start to listen requests in port defined by const PORT.
     if (process.env.NODE_ENV !== "test")
       app.listen(PORT, () => {
