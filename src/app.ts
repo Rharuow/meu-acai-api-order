@@ -43,8 +43,10 @@ const start = async () => {
     await consumer.subscribe({ topic: "createServiceOrder" });
     await consumer.run({
       eachMessage: async ({ topic, partition, message }) => {
-        console.log({
-          value: message.value.toString(),
+        console.log("topic = ", topic);
+        console.log("partition = ", partition);
+        console.log("VALUE", {
+          value: JSON.parse(message.value.toString()),
         });
       },
     });
