@@ -1,6 +1,5 @@
 import { kafka } from "@libs/kafka";
 import { isCreateServiceOrderRequestBody } from "@middlewares/order/verifyCreateObject";
-import { success } from "@serializer/erros/200";
 import { badRequest } from "@serializer/erros/400";
 import { CreateServiceOrderRequestBody } from "src/types/order/create";
 
@@ -41,7 +40,7 @@ export const createOrder = async () => {
       topic: "responseCreateOrder",
       messages: [
         {
-          value: JSON.stringify(success("Order created successfully")),
+          value: JSON.stringify(badRequest()),
         },
       ],
     });
