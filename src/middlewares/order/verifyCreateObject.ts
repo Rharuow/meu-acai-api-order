@@ -13,6 +13,8 @@ export function isCreateServiceOrderRequestBody(
     "maxToppingsAllowed" in order &&
     "price" in order &&
     "totalPrice" in order &&
+    "paymentMethod" in order &&
+    "isPaid" in order &&
     "creams" in order &&
     Array.isArray(order.creams) &&
     order.creams.every(
