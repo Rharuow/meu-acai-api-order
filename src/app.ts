@@ -1,11 +1,15 @@
+import dotenv from "dotenv";
 import "module-alias/register";
 import express from "express";
 // import swaggerUi from "swagger-ui-express";
 import cors from "cors";
-import { createOrder } from "./service/order";
+import { createOrderService } from "./service/order";
+import { connection } from "@libs/mongoose";
 
 // import swaggerDef from "./swagger-spec.json";
 
+// Load environment variables from .env file
+dotenv.config();
 const PORT = process.env.PORT || 8080;
 
 // Create a instance of express services
@@ -38,14 +42,17 @@ app.use(express.json({ limit: "10kb" }));
 
 // Methods to start server.
 const start = async () => {
+  console.log(process.env.NODE_ENV);
   try {
-    await createOrder();
+    await connection();
+    await createOrderService();
     // Method to make express service start to listen requests in port defined by const PORT.
     if (process.env.NODE_ENV !== "test")
       app.listen(PORT, () => {
         console.log(`API RUN IN: ${process.env.ORIGIN_URL}`);
       });
   } catch (error) {
+    console.error(error);
     process.exit(1);
   }
 };

@@ -5,5 +5,7 @@
 ## TO DO:
 
 - [ ] Kafka
-  - [ ] Add Kafka to the project
-  - [ ] create a consumer in the group 'consumer-order-api'
+  - [x] Add Kafka to the project
+  - [x] create a consumer in the group 'createOrderRequest'
+  - [ ] create a producer to send response.
+  - [ ] handle the request to save the order in mongoDB
