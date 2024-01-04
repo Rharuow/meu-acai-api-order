@@ -1,3 +1,3 @@
-export const success = (message?: string) => {
-  return { message: message || "Success", status: 200 };
+export const success = ({ data, message }: { message?: string; data?: {} }) => {
+  return { message: message || "Success", status: 200, ...(data && { data }) };
 };

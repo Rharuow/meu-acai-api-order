@@ -3,8 +3,9 @@ import "module-alias/register";
 import express from "express";
 // import swaggerUi from "swagger-ui-express";
 import cors from "cors";
-import { createOrderService } from "./service/order";
 import { connection } from "@libs/mongoose";
+import { createOrderService } from "./service/order/create";
+import { deleteOrderService } from "./service/order/delete";
 
 // import swaggerDef from "./swagger-spec.json";
 
@@ -46,6 +47,7 @@ const start = async () => {
   try {
     await connection();
     await createOrderService();
+    await deleteOrderService();
     // Method to make express service start to listen requests in port defined by const PORT.
     if (process.env.NODE_ENV !== "test")
       app.listen(PORT, () => {

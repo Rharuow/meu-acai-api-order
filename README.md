@@ -6,6 +6,18 @@
 
 - [ ] Kafka
   - [x] Add Kafka to the project
-  - [x] create a consumer in the group 'createOrderRequest'
-  - [ ] create a producer to send response.
-  - [ ] handle the request to save the order in mongoDB
+  - [x] Add mongoose to project
+  - [x] CREATE ORDER
+    - [x] create a consumer in the group 'createOrderRequest'
+    - [x] create a producer to send response.
+    - [x] handle the request to save the order in mongoDB
+  - [x] DELETE ORDER
+    - [x] create a consumer in the group 'deleteOrderRequest'
+    - [x] subscribe this consumer in the topic 'deleteServiceOrder'
+    - [x] the consumer will receive the id of the order to be deleted
+    - [x] create a producer to send response and order deleted
+  - [ ] GET ORDER
+    - [ ] create a consumer in the group 'getOrderRequest'
+    - [ ] subscribe this consumer in the topic 'getServiceOrder'
+    - [ ] the consumer will receive the id of the order to be received
+    - [ ] create a producer to send response and order received

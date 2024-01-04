@@ -10,3 +10,11 @@ export const createOrderRepository = async (
     throw new Error(error);
   }
 };
+
+export const deleteOrderRepository = async (id: string) => {
+  try {
+    return await OrderModel.deleteOne({ id });
+  } catch (error) {
+    throw new Error(error);
+  }
+};

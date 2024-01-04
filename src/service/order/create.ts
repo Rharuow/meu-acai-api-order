@@ -29,9 +29,14 @@ export const createOrderService = async () => {
                 )
               )
             );
-          await createOrderRepository(order);
+          const orderCreated = await createOrderRepository(order);
           await sendMessageToProducer(
-            JSON.stringify(success("Order created successfully"))
+            JSON.stringify(
+              success({
+                message: "Order created successfully",
+                data: { id: orderCreated._id },
+              })
+            )
           );
         } catch (error) {
           console.error("Error processing message:", error);
@@ -51,7 +56,7 @@ export const createOrderService = async () => {
 };
 
 const sendMessageToProducer = async (message: string) => {
-  console.log("MESSAGE = ", message);
+  console.log("MESSAGE TO CREATE ORDER = ", message);
   await producer.connect();
   await producer.send({
     topic: "responseCreateOrder",
