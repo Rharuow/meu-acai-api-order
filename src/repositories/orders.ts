@@ -18,3 +18,11 @@ export const deleteOrderRepository = async (id: string) => {
     throw new Error(error);
   }
 };
+
+export const getOrderRepository = async (id: string) => {
+  try {
+    return await OrderModel.findById(id).exec();
+  } catch (error) {
+    throw new Error(error);
+  }
+};

@@ -4,16 +4,15 @@ import { badRequest } from "@serializer/erros/400";
 import { unprocessableEntity } from "@serializer/erros/422";
 
 const consumer = kafka.consumer({
-  groupId: "deleteOrderRequest",
-  allowAutoTopicCreation: true,
+  groupId: "deleteOrder",
 });
-const producer = kafka.producer({ allowAutoTopicCreation: true });
+const producer = kafka.producer();
 
 export const deleteOrderService = async () => {
   let orderId: string;
   try {
     await consumer.connect();
-    await consumer.subscribe({ topic: "deleteServiceOrder" });
+    await consumer.subscribe({ topic: "deletingOrder" });
     await consumer.run({
       eachMessage: async ({ topic, partition, message }) => {
         try {
@@ -25,11 +24,12 @@ export const deleteOrderService = async () => {
                 )
               )
             );
+          console.log("DELETE MESSAGE CONUSME = ", String(message.value));
           orderId = String(message.value);
           await deleteOrderRepository(orderId);
-          await sendMessageToProducer(JSON.stringify({ status: 204 }));
+          return await sendMessageToProducer(JSON.stringify({ status: 204 }));
         } catch (error) {
-          console.error("Error processing message:", error);
+          console.error("DELETE Error processing message:", error);
           await sendMessageToProducer(
             JSON.stringify(
               badRequest("Error processing message" + error.message)
@@ -40,7 +40,7 @@ export const deleteOrderService = async () => {
       },
     });
   } catch (err) {
-    console.error("Error to delete service order  =", err);
+    console.error("DELETE Error to delete service order  =", err);
     throw new Error("Error to delete service order = " + err.message);
   }
 };
@@ -49,12 +49,12 @@ const sendMessageToProducer = async (message: string) => {
   console.log("MESSAGE TO DELETE ORDER = ", message);
   await producer.connect();
   await producer.send({
-    topic: "responseDeleteOrder",
+    topic: "deletedOrder",
     messages: [
       {
         value: message,
       },
     ],
   });
-  await producer.disconnect();
+  return await producer.disconnect();
 };
