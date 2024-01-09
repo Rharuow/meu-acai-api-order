@@ -1,9 +1,7 @@
-import { CreateServiceOrderRequestBody } from "@/types/order/create";
+import { CreateOrderRequest } from "@/protoBufferTypes/CreateOrderRequest";
 import { OrderModel } from "@models/order";
 
-export const createOrderRepository = async (
-  order: CreateServiceOrderRequestBody
-) => {
+export const createOrderRepository = async (order: CreateOrderRequest) => {
   try {
     return await OrderModel.create(order);
   } catch (error) {
