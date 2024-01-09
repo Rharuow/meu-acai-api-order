@@ -1,12 +1,19 @@
 import dotenv from "dotenv";
 import "module-alias/register";
+import path from "path";
 import express from "express";
 // import swaggerUi from "swagger-ui-express";
 import cors from "cors";
+import * as grpc from "@grpc/grpc-js";
+import * as protoLoader from "@grpc/proto-loader";
+
 import { connection } from "@libs/mongoose";
-import { deleteOrderService } from "./service/order/delete";
 import { kafka } from "@libs/kafka";
+
+import { deleteOrderService } from "./service/order/delete";
 import { router } from "./routes";
+import { createOrderService } from "./service/order/create";
+import { ProtoGrpcType } from "./protoBufferTypes/order-service";
 
 // import swaggerDef from "./swagger-spec.json";
 
@@ -47,10 +54,37 @@ app.use(express.json({ limit: "10kb" }));
 
 const kafkaAdmin = kafka.admin();
 
+// gRPC Setup
+const orderPackageDefinition = protoLoader.loadSync(
+  path.join(__dirname, "./protos/order-service.proto"),
+  { keepCase: true, longs: String, enums: String, defaults: true, oneofs: true }
+);
+const orderPackage = grpc.loadPackageDefinition(
+  orderPackageDefinition
+) as unknown as ProtoGrpcType;
+
 // Methods to start server.
 const start = async () => {
-  console.log(process.env.NODE_ENV);
+  console.log(process.env.ORDER_SERVICE_URL);
   try {
+    const server = new grpc.Server();
+    server.addService(orderPackage.OrderService.service, {
+      createOrder: createOrderService,
+      // getOrder: getOrder,
+      // listOrder: listOrder,
+    });
+    server.bindAsync(
+      process.env.ORDER_SERVICE_URL,
+      grpc.ServerCredentials.createInsecure(),
+      (err: Error | null, port: number) => {
+        if (err) {
+          console.error(`Server error: ${err.message}`);
+        } else {
+          console.log(`Server bound on port: ${port}`);
+          server.start();
+        }
+      }
+    );
     await connection();
     console.log(await kafkaAdmin.listTopics());
     await deleteOrderService();
@@ -60,7 +94,7 @@ const start = async () => {
         console.log(`API RUN IN: ${process.env.ORIGIN_URL}`);
       });
   } catch (error) {
-    console.error(error);
+    console.error("error to start = ", error);
     process.exit(1);
   }
 };
