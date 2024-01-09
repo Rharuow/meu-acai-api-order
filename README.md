@@ -21,3 +21,11 @@
     - [ ] subscribe this consumer in the topic 'getServiceOrder'
     - [ ] the consumer will receive the id of the order to be received
     - [ ] create a producer to send response and order received
+
+# TIPS TO PROJECT:
+
+1. running the following command, the types of proto buffer file are created
+
+```bash
+node_modules/.bin/proto-loader-gen-types --grpcLib=@grpc/grpc-js --outDir=src/protoBufferTypes src/protos/*.proto
+```
