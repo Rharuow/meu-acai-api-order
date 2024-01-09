@@ -14,6 +14,7 @@ import { deleteOrderService } from "./service/order/delete";
 import { router } from "./routes";
 import { createOrderService } from "./service/order/create";
 import { ProtoGrpcType } from "./protoBufferTypes/order-service";
+import { getOrderService } from "./service/order/get";
 
 // import swaggerDef from "./swagger-spec.json";
 
@@ -70,7 +71,7 @@ const start = async () => {
     const server = new grpc.Server();
     server.addService(orderPackage.OrderService.service, {
       createOrder: createOrderService,
-      // getOrder: getOrder,
+      getOrder: getOrderService,
       // listOrder: listOrder,
     });
     server.bindAsync(

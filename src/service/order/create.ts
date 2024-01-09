@@ -11,7 +11,6 @@ export const createOrderService = async (
 ) => {
   try {
     const orderCreated = await createOrderRepository(call.request);
-    console.log("Order's id = ", orderCreated.id);
     return callback(null, { id: orderCreated.id });
   } catch (err) {
     console.error("CREATE Error to create service order =", err);

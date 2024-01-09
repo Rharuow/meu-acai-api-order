@@ -12,6 +12,8 @@ export interface ProtoGrpcType {
   CreateOrderRequest: MessageTypeDefinition
   CreateOrderResponse: MessageTypeDefinition
   Extra: MessageTypeDefinition
+  GetOrderRequest: MessageTypeDefinition
+  GetOrderResponse: MessageTypeDefinition
   OrderService: SubtypeConstructor<typeof grpc.Client, _OrderServiceClient> & { service: _OrderServiceDefinition }
   Topping: MessageTypeDefinition
 }
