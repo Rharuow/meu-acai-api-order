@@ -9,7 +9,6 @@ export const getOrderService = async (
   call: ServerUnaryCall<GetOrderRequest, GetOrderResponse>,
   callback: sendUnaryData<GetOrderResponse>
 ) => {
-  console.log("call.request", call.request);
   try {
     const order = await getOrderRepository(call.request.id);
     return callback(null, order);

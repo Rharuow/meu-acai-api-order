@@ -1,5 +1,4 @@
 import { CreateOrderRequest } from "@/protoBufferTypes/CreateOrderRequest";
-import { GetOrderRequest } from "@/protoBufferTypes/GetOrderRequest";
 import { OrderModel } from "@models/order";
 
 export const createOrderRepository = async (order: CreateOrderRequest) => {

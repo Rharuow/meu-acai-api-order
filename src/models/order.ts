@@ -21,6 +21,8 @@ interface IExtra {
 interface IOrderDocument extends Document {
   name?: string;
   size: string;
+  paymentMethod: string;
+  isPaid: boolean;
   maxCreamsAllowed: number;
   maxToppingsAllowed: number;
   price: number;
@@ -28,6 +30,7 @@ interface IOrderDocument extends Document {
   creams: ICream[];
   toppings?: ITopping[];
   extras?: IExtra[];
+  userId: string;
 }
 
 const creamSchema = new Schema<ICream>({
@@ -51,6 +54,8 @@ const extraSchema = new Schema<IExtra>({
 const orderSchema = new Schema<IOrderDocument>({
   name: { type: String },
   size: { type: String, required: true },
+  paymentMethod: { type: String, required: true },
+  isPaid: { type: Boolean, required: true },
   maxCreamsAllowed: { type: Number, required: true },
   maxToppingsAllowed: { type: Number, required: true },
   price: { type: Number, required: true },
@@ -58,6 +63,7 @@ const orderSchema = new Schema<IOrderDocument>({
   creams: [creamSchema],
   toppings: [toppingSchema],
   extras: [extraSchema],
+  userId: { type: String, required: true },
 });
 
 const OrderModel = mongoose.model<IOrderDocument>("Order", orderSchema);
